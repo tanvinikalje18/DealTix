@@ -70,8 +70,8 @@ class Command(BaseCommand):
                 'days_from_now': 5
             },
             {
-                'title': 'IPL 2026 Final: MI vs CSK',
-                'description': 'The ultimate clash of the titans. Watch Mumbai Indians take on Chennai Super Kings in the grand finale of the Indian Premier League.',
+                'title': 'IPL 2026: MI vs CSK',
+                'description': 'The ultimate clash of the titans. Watch Mumbai Indians take on Chennai Super Kings in an electrifying league match of the Indian Premier League.',
                 'category': categories['live-sports'],
                 'location': 'Wankhede Stadium, Mumbai',
                 'price': 3500.00,
