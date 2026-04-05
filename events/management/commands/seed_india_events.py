@@ -18,10 +18,10 @@ class Command(BaseCommand):
         Category.objects.all().delete()
 
         categories_data = [
-            {'title': 'Music Concerts', 'slug': 'music-concerts', 'image': 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800'},
-            {'title': 'Standup Comedy', 'slug': 'standup-comedy', 'image': 'https://images.unsplash.com/photo-1585699324551-f6c309eedeca?q=80&w=800'},
-            {'title': 'Live Sports', 'slug': 'live-sports', 'image': 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=800'},
-            {'title': 'Tech Conferences', 'slug': 'tech-conferences', 'image': 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=800'},
+            {'title': 'Music Concerts', 'slug': 'music-concerts', 'image': 'https://picsum.photos/seed/music/800/600'},
+            {'title': 'Standup Comedy', 'slug': 'standup-comedy', 'image': 'https://picsum.photos/seed/comedy/800/600'},
+            {'title': 'Live Sports', 'slug': 'live-sports', 'image': 'https://picsum.photos/seed/sports/800/600'},
+            {'title': 'Tech Conferences', 'slug': 'tech-conferences', 'image': 'https://picsum.photos/seed/tech/800/600'},
         ]
 
         categories = {}
@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 'total_tickets': 5000,
                 'available_tickets': 150, # Filling Fast
                 'is_featured': True,
-                'image_url': 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/sunburn/1000/600',
                 'days_from_now': 15
             },
             {
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 'total_tickets': 1500,
                 'available_tickets': 0, # Sold Out
                 'is_featured': True,
-                'image_url': 'https://images.unsplash.com/photo-1585699324551-f6c309eedeca?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/zakir/1000/600',
                 'days_from_now': 5
             },
             {
@@ -78,7 +78,7 @@ class Command(BaseCommand):
                 'total_tickets': 33000,
                 'available_tickets': 33000, # Available
                 'is_featured': True,
-                'image_url': 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/ipl2/1000/600',
                 'days_from_now': 45
             },
             {
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                 'total_tickets': 10000,
                 'available_tickets': 1200, # Filling Fast
                 'is_featured': False,
-                'image_url': 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/arijit/1000/600',
                 'days_from_now': 20
             },
             {
@@ -102,7 +102,7 @@ class Command(BaseCommand):
                 'total_tickets': 800,
                 'available_tickets': 450, # Available
                 'is_featured': False,
-                'image_url': 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/react/1000/600',
                 'days_from_now': 60
             },
             {
@@ -114,7 +114,7 @@ class Command(BaseCommand):
                 'total_tickets': 1200,
                 'available_tickets': 0, # Sold Out
                 'is_featured': False,
-                'image_url': 'https://images.unsplash.com/photo-1585699324551-f6c309eedeca?q=80&w=1000',
+                'image_url': 'https://picsum.photos/seed/virdas/1000/600',
                 'days_from_now': 10
             }
         ]
