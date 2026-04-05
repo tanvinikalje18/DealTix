@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Checkout - DealTix{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 mt-12 mb-20 text-center">
+    <div class="glass-card p-10 border-t-4 border-brand-500">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Complete Your Purchase</h1>
+        <p class="text-gray-500 mb-8 font-medium">You are buying tickets for <span class="text-brand-700 font-bold">{{ listing.event.title }}</span></p>
+        
+        <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-left border border-gray-200">
+            <h3 class="text-sm uppercase tracking-widest text-gray-500 font-bold mb-4 border-b pb-2">Order Summary</h3>
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-gray-700 font-medium">Ticket Type</span>
+                <span class="text-gray-900 font-bold bg-gray-200 px-2 rounded">{{ listing.ticket_type }}</span>
+            </div>
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-gray-700 font-medium">Quantity</span>
+                <span class="text-gray-900 font-bold">{{ order.tickets_bought }} Tickets</span>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-700 font-medium">Price per ticket</span>
+                <span class="text-gray-900 font-bold">₹{{ listing.price_per_ticket }}</span>
+            </div>
+            <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                <span class="text-xl font-black text-gray-900">Total Amount</span>
+                <span class="text-3xl font-black text-emerald-600">₹{{ order.total_price }}</span>
+            </div>
+        </div>
+
+        <form action="{% url 'payment_success' %}" method="POST">
+            <input type="hidden" name="razorpay_payment_id" value="pay_mock_{{ order.id|default:'123' }}">
+            <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+            <input type="hidden" name="razorpay_signature" value="mock_signature_456">
+            <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-lg py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                Simulate Successful Payment
+            </button>
+        </form>
+        <p class="mt-4 text-xs text-gray-400">Mock Mode is active. No real API calls will be made.</p>
+    </div>
+</div>
+{% endblock %}

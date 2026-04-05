@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}DealTix - Discover & Book Events{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-r from-brand-900 to-purple-900 overflow-hidden rounded-3xl mx-4 sm:mx-6 lg:mx-8 mb-16 shadow-2xl">
+    <div class="absolute inset-0 bg-black/20 mix-blend-multiply"></div>
+    <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl mb-6">
+            Experience the <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-200 to-pink-300">Unforgettable</span>
+        </h1>
+        <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-200">
+            Discover and book tickets for the best concerts, parties, and movies near you.
+        </p>
+        <div class="mt-10 flex justify-center gap-4">
+            <a href="{% url 'event_list' %}" class="bg-white text-brand-900 hover:bg-gray-50 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                Explore Events
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+    
+    <!-- Categories -->
+    <section>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Browse by Category</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {% for category in categories %}
+            <a href="{% url 'event_list' %}?category={{ category.slug }}" class="glass-card overflow-hidden group hover:shadow-2xl transition-all duration-300 block">
+                <div class="aspect-w-16 aspect-h-9 bg-gray-200 relative min-h-[120px]">
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" alt="{{ category.title }}" class="object-cover w-full h-full absolute inset-0 group-hover:scale-105 transition-transform duration-500">
+                    {% else %}
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-300 to-purple-300"></div>
+                    {% endif %}
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                        <h3 class="text-white font-bold text-xl drop-shadow-lg">{{ category.title }}</h3>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <p class="text-gray-500 col-span-full">No categories found.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Featured Events -->
+    <section>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Events</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for event in featured_events %}
+            <a href="{% url 'event_detail' event.pk %}" class="glass-card overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                <div class="relative h-48 bg-gray-200 shrink-0">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="object-cover w-full h-full">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-tr from-brand-100 to-purple-100 flex items-center justify-center">
+                        <span class="text-3xl text-brand-300 font-bold">{{ event.title|slice:":1" }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="absolute top-4 right-4 flex flex-col items-end gap-2">
+                        <span class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm">
+                            {% if event.starting_price %}₹{{ event.starting_price }}<span class="text-[10px] text-gray-500 uppercase ml-1 block text-right leading-none">onwards</span>{% else %}No listings{% endif %}
+                        </span>
+                        {% if event.status == 'Sold Out' %}
+                        <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm animate-pulse">Sold Out</span>
+                        {% elif event.status == 'Filling Fast' %}
+                        <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">Filling Fast</span>
+                        {% else %}
+                        <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">Available</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <p class="text-sm text-brand-600 font-semibold mb-1">{{ event.category.title }}</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">{{ event.title }}</h3>
+                    <p class="text-gray-500 text-sm mb-4 line-clamp-2 min-h-[40px]">{{ event.description }}</p>
+                    <div class="mt-auto flex items-center text-gray-500 text-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        {{ event.date|date:"M d, Y" }}
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <p class="text-gray-500 col-span-full">No featured events right now.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - DealTix{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-10">
+        <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">My Dashboard</h1>
+        <p class="mt-2 text-lg text-gray-600">Welcome back, <span class="font-bold text-gray-900">{{ user.username }}</span>. Manage your tickets here.</p>
+    </div>
+
+    <!-- Purchases Section -->
+    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+        My Purchases
+    </h2>
+    <div class="glass-card overflow-hidden mb-12">
+        {% if orders %}
+        <ul class="divide-y divide-gray-200 bg-white/50">
+            {% for order in orders %}
+            <li class="p-6 hover:bg-white/80 transition-colors duration-200 group">
+                <div class="flex flex-col sm:flex-row items-center justify-between">
+                    <div class="flex items-center space-x-6 w-full sm:w-auto">
+                        <div class="flex-shrink-0 h-24 w-24 bg-gray-200 rounded-2xl overflow-hidden hidden sm:block shadow-sm">
+                            {% if order.listing.event.image %}
+                            <img src="{{ order.listing.event.image.url }}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            {% else %}
+                            <div class="h-full w-full bg-gradient-to-br from-brand-300 to-purple-300 flex items-center justify-center">
+                                <span class="text-white font-bold text-xl">{{ order.listing.event.title|slice:":1" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <p class="text-xl font-bold text-gray-900 mb-1">
+                                <a href="{% url 'event_detail' order.listing.event.pk %}" class="hover:text-brand-600 transition-colors">{{ order.listing.event.title }}</a>
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500 mb-1 font-medium">
+                                <span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded mr-2">{{ order.listing.ticket_type }}</span>
+                                {{ order.listing.event.date|date:"M d, Y" }}
+                            </div>
+                            <p class="text-sm text-gray-500">Bought from: {{ order.listing.seller.username }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:mt-0 bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-2xl p-4 text-center min-w-[140px] border border-emerald-100 shadow-sm relative overflow-hidden">
+                        {% if order.status == 'Completed' %}
+                        <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">PAID</div>
+                        {% elif order.status == 'Pending' %}
+                        <div class="absolute top-0 right-0 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">PENDING</div>
+                        {% else %}
+                        <div class="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">FAILED</div>
+                        {% endif %}
+                        <p class="text-xs text-emerald-700 font-bold uppercase tracking-wider mb-1 mt-1">Quantity</p>
+                        <p class="text-3xl font-black text-emerald-900">{{ order.tickets_bought }}</p>
+                        <div class="mt-2 pt-2 border-t border-emerald-200/50">
+                            <p class="text-xs text-gray-600 font-medium tracking-wide">TOTAL: <span class="text-emerald-800 font-bold">₹{{ order.total_price }}</span></p>
+                        </div>
+                        
+                        <!-- Rate Seller Button / Status -->
+                        {% if order.status == 'Completed' %}
+                            <div class="mt-3 pt-3 border-t border-emerald-200">
+                                {% if order.id in rated_order_ids %}
+                                    <span class="text-[10px] font-black uppercase text-emerald-600 flex items-center justify-center tracking-widest">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        Reviewed
+                                    </span>
+                                {% else %}
+                                    <button type="button" onclick="document.getElementById('rate-modal-{{ order.id }}').classList.toggle('hidden')" class="w-full bg-white text-[11px] font-bold text-emerald-700 border border-emerald-200 py-1.5 rounded hover:bg-emerald-50 transition-colors shadow-sm uppercase tracking-wider">
+                                        Rate Seller
+                                    </button>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Rate Seller Form (Inline) -->
+                {% if order.status == 'Completed' and order.id not in rated_order_ids %}
+                <div id="rate-modal-{{ order.id }}" class="hidden mt-4 bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-inner">
+                    <form action="{% url 'rate_seller' order.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                            <h4 class="font-extrabold text-gray-900 flex items-center gap-2">
+                                Rate <span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-sm">{{ order.listing.seller.username }}</span>
+                            </h4>
+                            <div class="flex items-center gap-2">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Stars</label>
+                                <select name="rating" class="border border-gray-300 rounded px-2 py-1 text-sm bg-white focus:ring-brand-500 font-bold text-yellow-600 cursor-pointer shadow-sm">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                                    <option value="3">⭐⭐⭐ (3)</option>
+                                    <option value="2">⭐⭐ (2)</option>
+                                    <option value="1">⭐ (1)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea name="comment" rows="2" class="w-full border border-gray-300 rounded-lg p-3 text-sm resize-none focus:ring-brand-500 focus:border-brand-500 bg-white shadow-sm" placeholder="Tell us how the transaction and ticket delivery went (Optional)..."></textarea>
+                        <div class="mt-3 flex gap-2 justify-end">
+                            <button type="button" onclick="document.getElementById('rate-modal-{{ order.id }}').classList.add('hidden')" class="px-4 py-1.5 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">Cancel</button>
+                            <button type="submit" class="bg-gradient-to-r from-brand-600 to-purple-600 text-white font-bold py-1.5 px-6 rounded-lg shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="p-12 text-center bg-white/50">
+            <p class="text-gray-500 mb-4 font-medium">You haven't bought any tickets yet.</p>
+            <a href="{% url 'event_list' %}" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-full text-white bg-gray-900 hover:bg-gray-800 transition-colors">Browse Marketplace</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Listings Section -->
+    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        My Listed Tickets (Selling)
+    </h2>
+    <div class="glass-card overflow-hidden">
+        {% if listings %}
+        <ul class="divide-y divide-gray-200 bg-white/50">
+            {% for listing in listings %}
+            <li class="p-6 hover:bg-white/80 transition-colors duration-200">
+                <div class="flex flex-col sm:flex-row items-center justify-between">
+                    <div>
+                        <p class="text-lg font-bold text-gray-900 mb-1.5">{{ listing.event.title }}</p>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded font-bold">{{ listing.ticket_type }}</span>
+                            <span>Listed on: {{ listing.listed_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6 mt-4 sm:mt-0">
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Remaining</p>
+                            <p class="text-xl font-black text-gray-900">{{ listing.quantity }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Price/Ea</p>
+                            <p class="text-xl font-black text-brand-700">₹{{ listing.price_per_ticket }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Status</p>
+                            {% if listing.is_active %}
+                            <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Active</span>
+                            {% else %}
+                            <span class="bg-gray-100 text-gray-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest">Sold / Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="p-12 text-center bg-white/50">
+            <p class="text-gray-500 mb-4 font-medium">You are not selling any tickets right now.</p>
+            <a href="{% url 'sell_ticket' %}" class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-full text-brand-700 bg-brand-100 hover:bg-brand-200 transition-colors">List Tickets for Sale</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

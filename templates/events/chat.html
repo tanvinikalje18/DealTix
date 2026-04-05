@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Chat with {{ other_user.username }} - DealTix{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-20 h-[80vh] flex flex-col">
+    <!-- Chat Header -->
+    <div class="bg-white rounded-t-2xl shadow-sm border border-gray-100 p-4 shrink-0 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <a href="{% url 'inbox' %}" class="flex items-center text-sm font-medium text-gray-500 hover:text-brand-600 transition-colors">
+                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                Back
+            </a>
+            <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-brand-100 to-purple-100 flex items-center justify-center text-brand-600 font-bold border border-brand-200 shadow-inner hidden sm:flex">
+                {{ other_user.username|slice:":1"|upper }}
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-gray-900">{{ other_user.username }}</h1>
+                <p class="text-xs text-gray-500">Negotiating {{ listing.ticket_type }} for {{ listing.event.title }}</p>
+            </div>
+        </div>
+        <div class="text-right hidden sm:block">
+            <p class="text-xs text-gray-400 capitalize whitespace-nowrap">Current Listing Price</p>
+            <p class="text-lg font-black text-emerald-600">₹{{ listing.price_per_ticket }}</p>
+        </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="bg-gray-50 flex-grow border-x border-gray-100 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 shadow-inner" id="chat-box">
+        {% for msg in chat_messages %}
+        {% if msg.sender == request.user %}
+        <div class="flex justify-end">
+            <div class="bg-gradient-to-br from-brand-500 to-purple-600 text-white rounded-2xl rounded-tr-none px-5 py-3 shadow-sm max-w-[85%] sm:max-w-md">
+                <p class="text-sm">{% if msg.content|length > 0 %}{{ msg.content }}{% endif %}</p>
+                <p class="text-[10px] text-brand-100 text-right mt-1 opacity-80">{{ msg.timestamp|time:"H:i" }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="flex justify-start">
+            <div class="bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none px-5 py-3 shadow-sm max-w-[85%] sm:max-w-md">
+                <p class="text-sm">{{ msg.content }}</p>
+                <p class="text-[10px] text-gray-400 text-right mt-1">{{ msg.timestamp|time:"H:i" }}</p>
+            </div>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="flex-grow flex items-center justify-center">
+            <div class="bg-blue-50 text-blue-800 border border-blue-100 rounded-xl p-4 text-center max-w-sm shadow-sm text-sm">
+                <p class="font-bold mb-1">Send the first message!</p>
+                <p>Chat securely with {{ other_user.username }} to negotiate prices or ask about ticket validity.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Chat Input -->
+    <div class="bg-white rounded-b-2xl shadow-sm border border-gray-100 p-4 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <form method="POST" class="flex gap-2 relative">
+            {% csrf_token %}
+            <textarea name="content" rows="1" class="block w-full rounded-full border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm py-3 pl-4 pr-16 resize-none bg-gray-50 hover:bg-white transition-colors" placeholder="Message {{ other_user.username }}..." required></textarea>
+            <button type="submit" class="absolute right-2 top-1.5 bottom-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-full aspect-square flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
+                <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Scroll to bottom of chat automatically
+    const chatBox = document.getElementById('chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+{% endblock %}
