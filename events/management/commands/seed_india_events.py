@@ -18,10 +18,10 @@ class Command(BaseCommand):
         Category.objects.all().delete()
 
         categories_data = [
-            {'title': 'Music Concerts', 'slug': 'music-concerts', 'image': 'https://picsum.photos/seed/music/800/600'},
-            {'title': 'Standup Comedy', 'slug': 'standup-comedy', 'image': 'https://picsum.photos/seed/comedy/800/600'},
-            {'title': 'Live Sports', 'slug': 'live-sports', 'image': 'https://picsum.photos/seed/sports/800/600'},
-            {'title': 'Tech Conferences', 'slug': 'tech-conferences', 'image': 'https://picsum.photos/seed/tech/800/600'},
+            {'title': 'Music Concerts', 'slug': 'music-concerts', 'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Ed_Sheeran_2013.jpg/800px-Ed_Sheeran_2013.jpg'},
+            {'title': 'Standup Comedy', 'slug': 'standup-comedy', 'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Microphone_in_a_dark_room.jpg/800px-Microphone_in_a_dark_room.jpg'},
+            {'title': 'Live Sports', 'slug': 'live-sports', 'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/M._Chinnaswamy_Stadium.jpg/800px-M._Chinnaswamy_Stadium.jpg'},
+            {'title': 'Tech Conferences', 'slug': 'tech-conferences', 'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Web_Summit_2018_-_Centre_Stage_%2831868580008%29.jpg/800px-Web_Summit_2018_-_Centre_Stage_%2831868580008%29.jpg'},
         ]
 
         categories = {}
@@ -46,76 +46,76 @@ class Command(BaseCommand):
 
         events_data = [
             {
-                'title': 'Sunburn Arena ft. Martin Garrix',
-                'description': 'The biggest EDM festival returns to India. Get ready for an electrifying night with Martin Garrix performing his top hits live in Mumbai.',
+                'title': 'Diljit Dosanjh - Dil-Luminati Tour',
+                'description': 'The biggest Punjabi music tour hits India! Catch Diljit Dosanjh performing live in Mumbai with his blockbuster hits.',
                 'category': categories['music-concerts'],
                 'location': 'Jio World Garden, BKC, Mumbai',
-                'price': 2500.00,
-                'total_tickets': 5000,
+                'price': 4500.00,
+                'total_tickets': 15000,
                 'available_tickets': 150, # Filling Fast
                 'is_featured': True,
-                'image_url': 'https://picsum.photos/seed/sunburn/1000/600',
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Diljit_Dosanjh_at_the_Film_Fare_awards.jpg/800px-Diljit_Dosanjh_at_the_Film_Fare_awards.jpg',
                 'days_from_now': 15
             },
             {
-                'title': 'Zakir Khan Live - Sakht Launda',
-                'description': 'Witness the sakht launda Zakir Khan in his brand new comedy special. An evening full of relatable stories and unstoppable laughs.',
+                'title': 'Anubhav Singh Bassi - Kisi Ko Batana Mat',
+                'description': 'Bassi is back with a fresh set of hilarious stories. Grab your tickets before they sell out for the biggest comedy show of the year!',
                 'category': categories['standup-comedy'],
                 'location': 'Siri Fort Auditorium, New Delhi',
-                'price': 999.00,
-                'total_tickets': 1500,
+                'price': 1200.00,
+                'total_tickets': 1800,
                 'available_tickets': 0, # Sold Out
                 'is_featured': True,
-                'image_url': 'https://picsum.photos/seed/zakir/1000/600',
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Microphone_in_a_dark_room.jpg/800px-Microphone_in_a_dark_room.jpg',
                 'days_from_now': 5
             },
             {
-                'title': 'IPL 2026: MI vs CSK',
-                'description': 'The ultimate clash of the titans. Watch Mumbai Indians take on Chennai Super Kings in an electrifying league match of the Indian Premier League.',
+                'title': 'IPL 2026: RCB vs CSK',
+                'description': 'The Southern Derby! Watch Royal Challengers Bangalore take on Chennai Super Kings in a thrilling group stage clash.',
                 'category': categories['live-sports'],
-                'location': 'Wankhede Stadium, Mumbai',
+                'location': 'M. Chinnaswamy Stadium, Bengaluru',
                 'price': 3500.00,
-                'total_tickets': 33000,
+                'total_tickets': 39000,
                 'available_tickets': 33000, # Available
                 'is_featured': True,
-                'image_url': 'https://picsum.photos/seed/ipl2/1000/600',
-                'days_from_now': 45
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/M._Chinnaswamy_Stadium.jpg/800px-M._Chinnaswamy_Stadium.jpg',
+                'days_from_now': 8
             },
             {
-                'title': 'Arijit Singh India Tour',
-                'description': 'Soulful melodies and romantic tracks. Experience Arijit Singh live in concert for a night you will never forget.',
+                'title': 'Arijit Singh Live In Concert',
+                'description': 'Soulful melodies and romantic tracks. Experience Arijit Singh live in concert for a night of musical magic.',
                 'category': categories['music-concerts'],
-                'location': 'Bhartiya City, Bengaluru',
-                'price': 1500.00,
-                'total_tickets': 10000,
+                'location': 'EKA Arena, Ahmedabad',
+                'price': 2500.00,
+                'total_tickets': 12000,
                 'available_tickets': 1200, # Filling Fast
                 'is_featured': False,
-                'image_url': 'https://picsum.photos/seed/arijit/1000/600',
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Arijit_Singh_at_Renault_Star_Guild_Awards_2014.jpg/800px-Arijit_Singh_at_Renault_Star_Guild_Awards_2014.jpg',
                 'days_from_now': 20
             },
             {
-                'title': 'React India 2026',
-                'description': 'The premier international React.js conference in India. Join core team members and industry experts for 3 days of talks and workshops.',
-                'category': categories['tech-conferences'],
-                'location': 'Grand Hyatt, Goa',
-                'price': 7500.00,
-                'total_tickets': 800,
+                'title': 'Sunburn Arena ft. Alan Walker',
+                'description': 'India, are you ready? Alan Walker brings the spectacular Walkerworld Tour to Pune for massive EDM night.',
+                'category': categories['music-concerts'],
+                'location': 'NESCO Center, Pune',
+                'price': 3000.00,
+                'total_tickets': 8000,
                 'available_tickets': 450, # Available
                 'is_featured': False,
-                'image_url': 'https://picsum.photos/seed/react/1000/600',
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Alan_Walker_-_Stavernfestivalen_2018.jpg/800px-Alan_Walker_-_Stavernfestivalen_2018.jpg',
                 'days_from_now': 60
             },
             {
-                'title': 'Vir Das: Mind Fool Tour',
-                'description': 'International Emmy Award winner Vir Das brings his new world tour to Pune. Get ready for an hour of fresh, unfiltered comedy.',
-                'category': categories['standup-comedy'],
-                'location': 'Phoenix Marketcity, Pune',
-                'price': 1200.00,
+                'title': 'India Blockchain Week 2026',
+                'description': 'The hottest Web3 and tech conference in Asia. Join developers, founders, and investors for groundbreaking panel discussions.',
+                'category': categories['tech-conferences'],
+                'location': 'Grand Hyatt, Bengaluru',
+                'price': 5500.00,
                 'total_tickets': 1200,
-                'available_tickets': 0, # Sold Out
+                'available_tickets': 800, # Available
                 'is_featured': False,
-                'image_url': 'https://picsum.photos/seed/virdas/1000/600',
-                'days_from_now': 10
+                'image_url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Web_Summit_2018_-_Centre_Stage_%2831868580008%29.jpg/800px-Web_Summit_2018_-_Centre_Stage_%2831868580008%29.jpg',
+                'days_from_now': 30
             }
         ]
 
